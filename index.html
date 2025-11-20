@@ -1,167 +1,425 @@
-
-Esos símbolos **deben eliminarse**, porque son de Markdown, no de HTML.
-
-
-~~~html
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Dashboard Matchita Café</title>
-
-<!-- Librerías -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Dashboard — Matchita Café</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<!-- Estilos Matcha Cute -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
-    body {
-        font-family: "Poppins", sans-serif;
-        background: #f4f9f4;
-        margin: 0;
-        padding: 0;
-        color: #234623;
-    }
-
-    header {
-        background: #d1f0d0;
-        padding: 20px;
-        text-align: center;
-        border-bottom: 3px solid #b7deb6;
-    }
-
-    h1 {
-        margin: 0;
-        font-size: 30px;
-        font-weight: 700;
-    }
-
-    main {
-        padding: 20px;
-        max-width: 1100px;
-        margin: auto;
-    }
-
-    .tarjeta {
-        background: white;
-        padding: 20px;
-        border-radius: 16px;
-        margin-bottom: 25px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-        border: 2px solid #e3f6df;
-    }
-
-    .tarjeta h2 {
-        margin-top: 0;
-        color: #2c5e2c;
-    }
-
-    canvas {
-        width: 100%;
-        max-height: 380px;
-    }
-
-    footer {
-        text-align: center;
-        padding: 20px;
-        color: #4b6b4a;
-        margin-top: 30px;
-        font-size: 14px;
-    }
+  :root{
+    --matcha-bg:#eaf7ea;    /* fondo verde pastel */
+    --card-bg:#fff8ef;      /* crema pastel para tarjetas */
+    --accent:#2a6b3a;       /* verde oscuro para textos */
+    --muted:#687a6b;
+  }
+  html,body{height:100%; margin:0; font-family:Inter,system-ui,Arial,sans-serif; background:var(--matcha-bg); color:var(--accent);}
+  header{background:linear-gradient(180deg,#e6f6e6, #def0d6); padding:22px 18px; border-bottom:1px solid rgba(42,107,58,0.08);}
+  header h1{margin:0; font-weight:600; font-size:22px; letter-spacing:0.2px;}
+  .container{max-width:1100px; margin:20px auto; padding:0 18px;}
+  .cards{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:18px;}
+  .card{background:var(--card-bg); border-radius:12px; padding:14px 16px; box-shadow:0 6px 18px rgba(16,46,22,0.04); min-width:200px; flex:1 1 220px; border:1px solid rgba(42,107,58,0.04);}
+  .card-title{font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:0.6px;}
+  .card-value{font-size:20px; font-weight:600; color:var(--accent); margin-top:6px;}
+  .charts{display:grid; grid-template-columns:1fr; gap:14px; margin-bottom:18px;}
+  @media(min-width:900px){ .charts{grid-template-columns:2fr 1fr;} .card{min-width:220px;} }
+  .chart-card{background:var(--card-bg); padding:12px; border-radius:12px; box-shadow:0 6px 18px rgba(16,46,22,0.03); border:1px solid rgba(42,107,58,0.03);}
+  .chart-title{font-size:14px; color:var(--accent); margin:0 0 8px 0;}
+  canvas{width:100% !important; height:320px !important;}
+  .table-wrap{background:var(--card-bg); border-radius:12px; padding:12px; box-shadow:0 6px 18px rgba(16,46,22,0.03); border:1px solid rgba(42,107,58,0.03);}
+  table{width:100%; border-collapse:collapse; font-size:13px; color:#163f2c;}
+  th,td{padding:8px 10px; text-align:left;}
+  th{background:transparent; color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:0.6px;}
+  tr:nth-child(even){background:rgba(255,255,255,0.6);}
+  .muted{color:var(--muted); font-size:13px;}
+  footer{max-width:1100px;margin:18px auto; padding:10px 18px; color:var(--muted); font-size:13px;}
+  .small{font-size:12px;color:var(--muted);}
 </style>
-
 </head>
 <body>
-
 <header>
-    <h1>Dashboard – Matchita Café 🍵💚</h1>
+  <div class="container">
+    <h1>Matchita Café — Dashboard de Ventas</h1>
+  </div>
 </header>
 
-<main>
+<main class="container">
+  <section class="cards" aria-label="KPI cards">
+    <div class="card">
+      <div class="card-title">Total unidades vendidas (anual)</div>
+      <div class="card-value" id="kpi-unidades">—</div>
+      <div class="small muted" id="kpi-unidades-sub"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Ingresos totales (MXN)</div>
+      <div class="card-value" id="kpi-ingresos">—</div>
+      <div class="small muted" id="kpi-ingresos-sub"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Ticket promedio (MXN / unidad)</div>
+      <div class="card-value" id="kpi-ticket">—</div>
+      <div class="small muted" id="kpi-ticket-sub"></div>
+    </div>
+  </section>
 
-<div class="tarjeta">
-    <h2>📊 Datos Generales</h2>
-    <p>Los gráficos se generan automáticamente con los datos internos del archivo.</p>
-</div>
+  <section class="charts" aria-label="Gráficas">
+    <div class="chart-card">
+      <h3 class="chart-title">Ingresos por mes</h3>
+      <canvas id="chartBar" aria-label="Ingresos por mes"></canvas>
+    </div>
 
-<div class="tarjeta">
-    <h2>📈 Ventas por Mes (Barras)</h2>
-    <canvas id="chartBar"></canvas>
-</div>
+    <div>
+      <div class="chart-card" style="margin-bottom:14px;">
+        <h3 class="chart-title">Tendencia mensual</h3>
+        <canvas id="chartLine" aria-label="Tendencia mensual"></canvas>
+      </div>
 
-<div class="tarjeta">
-    <h2>📊 Ventas por Mes (Línea)</h2>
-    <canvas id="chartLine"></canvas>
-</div>
+      <div class="chart-card">
+        <h3 class="chart-title">Top productos (participación)</h3>
+        <canvas id="chartPie" aria-label="Top productos"></canvas>
+      </div>
+    </div>
+  </section>
 
-<div class="tarjeta">
-    <h2>🍰 Distribución de Ventas (Dona)</h2>
-    <canvas id="chartPie"></canvas>
-</div>
-
+  <section class="table-wrap" aria-label="Top productos">
+    <h3 class="chart-title" style="margin-bottom:8px;">Top 10 productos por ingreso anual</h3>
+    <div style="overflow:auto; max-height:360px;">
+      <table id="topTable" role="table">
+        <thead><tr><th>Producto</th><th class="small">Categoría</th><th>Unidades anuales</th><th>Ingresos (MXN)</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
 </main>
 
 <footer>
-    Dashboard Matchita Café – Datos integrados en el mismo HTML
+  Datos integrados en el archivo • Matchita Café
 </footer>
 
 <script>
-    // ====== DATOS DE VENTAS (SIN CSV) ======
-    const data = [
-        { mes: "Enero", ventas: 4200 },
-        { mes: "Febrero", ventas: 4800 },
-        { mes: "Marzo", ventas: 5100 },
-        { mes: "Abril", ventas: 3900 },
-        { mes: "Mayo", ventas: 5600 },
-        { mes: "Junio", ventas: 6000 },
-        { mes: "Julio", ventas: 6700 },
-        { mes: "Agosto", ventas: 7200 },
-        { mes: "Septiembre", ventas: 6900 },
-        { mes: "Octubre", ventas: 7300 },
-        { mes: "Noviembre", ventas: 7600 },
-        { mes: "Diciembre", ventas: 8200 }
-    ];
+// === CSV INCRUSTADO ===
+const csvText = `Producto,Mes,Unidades Vendidas,Ingresos (MXN)
+Matcha Clásico Premium,Enero,122,7930
+Matcha Clásico Premium,Febrero,199,12935
+Matcha Clásico Premium,Marzo,112,7280
+Matcha Clásico Premium,Abril,34,2210
+Matcha Clásico Premium,Mayo,126,8190
+Matcha Clásico Premium,Junio,145,9430
+Matcha Clásico Premium,Julio,167,10855
+Matcha Clásico Premium,Agosto,132,8580
+Matcha Clásico Premium,Septiembre,110,7150
+Matcha Clásico Premium,Octubre,98,6370
+Matcha Clásico Premium,Noviembre,140,9100
+Matcha Clásico Premium,Diciembre,185,12025
+Matcha Latte Vainilla,Enero,95,7125
+Matcha Latte Vainilla,Febrero,110,8250
+Matcha Latte Vainilla,Marzo,87,6525
+Matcha Latte Vainilla,Abril,60,4500
+Matcha Latte Vainilla,Mayo,130,9750
+Matcha Latte Vainilla,Junio,150,11250
+Matcha Latte Vainilla,Julio,170,12750
+Matcha Latte Vainilla,Agosto,160,12000
+Matcha Latte Vainilla,Septiembre,140,10500
+Matcha Latte Vainilla,Octubre,120,9000
+Matcha Latte Vainilla,Noviembre,155,11625
+Matcha Latte Vainilla,Diciembre,180,13500
+Matcha Latte Coco,Enero,80,6000
+Matcha Latte Coco,Febrero,90,6750
+Matcha Latte Coco,Marzo,75,5625
+Matcha Latte Coco,Abril,50,3750
+Matcha Latte Coco,Mayo,110,8250
+Matcha Latte Coco,Junio,130,9750
+Matcha Latte Coco,Julio,150,11250
+Matcha Latte Coco,Agosto,145,10875
+Matcha Latte Coco,Septiembre,125,9375
+Matcha Latte Coco,Octubre,115,8625
+Matcha Latte Coco,Noviembre,140,10500
+Matcha Latte Coco,Diciembre,165,12375
+Matcha Latte Avena,Enero,70,5250
+Matcha Latte Avena,Febrero,85,6375
+Matcha Latte Avena,Marzo,65,4875
+Matcha Latte Avena,Abril,55,4125
+Matcha Latte Avena,Mayo,100,7500
+Matcha Latte Avena,Junio,120,9000
+Matcha Latte Avena,Julio,140,10500
+Matcha Latte Avena,Agosto,135,10125
+Matcha Latte Avena,Septiembre,115,8625
+Matcha Latte Avena,Octubre,105,7875
+Matcha Latte Avena,Noviembre,130,9750
+Matcha Latte Avena,Diciembre,155,11625
+Matcha Frappé Clásico,Enero,60,5100
+Matcha Frappé Clásico,Febrero,75,6375
+Matcha Frappé Clásico,Marzo,85,7225
+Matcha Frappé Clásico,Abril,95,8075
+Matcha Frappé Clásico,Mayo,120,10200
+Matcha Frappé Clásico,Junio,140,11900
+Matcha Frappé Clásico,Julio,160,13600
+Matcha Frappé Clásico,Agosto,155,13175
+Matcha Frappé Clásico,Septiembre,130,11050
+Matcha Frappé Clásico,Octubre,110,9350
+Matcha Frappé Clásico,Noviembre,125,10625
+Matcha Frappé Clásico,Diciembre,150,12750
+Matcha Frappé Coco,Enero,55,4675
+Matcha Frappé Coco,Febrero,70,5950
+Matcha Frappé Coco,Marzo,80,6800
+Matcha Frappé Coco,Abril,90,7650
+Matcha Frappé Coco,Mayo,110,9350
+Matcha Frappé Coco,Junio,130,11050
+Matcha Frappé Coco,Julio,150,12750
+Matcha Frappé Coco,Agosto,145,12325
+Matcha Frappé Coco,Septiembre,120,10200
+Matcha Frappé Coco,Octubre,105,8925
+Matcha Frappé Coco,Noviembre,120,10200
+Matcha Frappé Coco,Diciembre,140,11900
+Matcha Frappé Fresa,Enero,50,4250
+Matcha Frappé Fresa,Febrero,65,5525
+Matcha Frappé Fresa,Marzo,75,6375
+Matcha Frappé Fresa,Abril,85,7225
+Matcha Frappé Fresa,Mayo,105,8925
+Matcha Frappé Fresa,Junio,125,10625
+Matcha Frappé Fresa,Julio,145,12325
+Matcha Frappé Fresa,Agosto,140,11900
+Matcha Frappé Fresa,Septiembre,115,9775
+Matcha Frappé Fresa,Octubre,100,8500
+Matcha Frappé Fresa,Noviembre,115,9775
+Matcha Frappé Fresa,Diciembre,135,11475
+Matcha Frappé Mango,Enero,45,3825
+Matcha Frappé Mango,Febrero,60,5100
+Matcha Frappé Mango,Marzo,70,5950
+Matcha Frappé Mango,Abril,80,6800
+Matcha Frappé Mango,Mayo,100,8500
+Matcha Frappé Mango,Junio,120,10200
+Matcha Frappé Mango,Julio,140,11900
+Matcha Frappé Mango,Agosto,135,11475
+Matcha Frappé Mango,Septiembre,110,9350
+Matcha Frappé Mango,Octubre,95,8075
+Matcha Frappé Mango,Noviembre,110,9350
+Matcha Frappé Mango,Diciembre,130,11050
+Matcha shots Energía,Enero,200,6000
+Matcha shots Energía,Febrero,220,6600
+Matcha shots Energía,Marzo,210,6300
+Matcha shots Energía,Abril,190,5700
+Matcha shots Energía,Mayo,230,6900
+Matcha shots Energía,Junio,250,7500
+Matcha shots Energía,Julio,270,8100
+Matcha shots Energía,Agosto,260,7800
+Matcha shots Energía,Septiembre,240,7200
+Matcha shots Energía,Octubre,230,6900
+Matcha shots Energía,Noviembre,250,7500
+Matcha shots Energía,Diciembre,280,8400
+Matcha shots Relajación,Enero,180,5400
+Matcha shots Relajación,Febrero,195,5850
+Matcha shots Relajación,Marzo,185,5550
+Matcha shots Relajación,Abril,170,5100
+Matcha shots Relajación,Mayo,210,6300
+Matcha shots Relajación,Junio,225,6750
+Matcha shots Relajación,Julio,245,7350
+Matcha shots Relajación,Agosto,235,7050
+Matcha shots Relajación,Septiembre,215,6450
+Matcha shots Relajación,Octubre,205,6150
+Matcha shots Relajación,Noviembre,225,6750
+Matcha shots Relajación,Diciembre,255,7650
+Matcha shots Detox,Enero,160,4800
+Matcha shots Detox,Febrero,175,5250
+Matcha shots Detox,Marzo,165,4950
+Matcha shots Detox,Abril,155,4650
+Matcha shots Detox,Mayo,195,5850
+Matcha shots Detox,Junio,210,6300
+Matcha shots Detox,Julio,230,6900
+Matcha shots Detox,Agosto,220,6600
+Matcha shots Detox,Septiembre,200,6000
+Matcha shots Detox,Octubre,190,5700
+Matcha shots Detox,Noviembre,210,6300
+Matcha shots Detox,Diciembre,240,7200
+Kit Matcha Inicial,Enero,40,5200
+Kit Matcha Inicial,Febrero,55,7150
+Kit Matcha Inicial,Marzo,45,5850
+Kit Matcha Inicial,Abril,35,4550
+Kit Matcha Inicial,Mayo,60,7800
+Kit Matcha Inicial,Junio,70,9100
+Kit Matcha Inicial,Julio,85,11050
+Kit Matcha Inicial,Agosto,80,10400
+Kit Matcha Inicial,Septiembre,65,8450
+Kit Matcha Inicial,Octubre,55,7150
+Kit Matcha Inicial,Noviembre,70,9100
+Kit Matcha Inicial,Diciembre,90,11700
+Kit Matcha Experto,Enero,30,5700
+Kit Matcha Experto,Febrero,40,7600
+Kit Matcha Experto,Marzo,35,6650
+Kit Matcha Experto,Abril,25,4750
+Kit Matcha Experto,Mayo,45,8550
+Kit Matcha Experto,Junio,55,10450
+Kit Matcha Experto,Julio,65,12350
+Kit Matcha Experto,Agosto,60,11400
+Kit Matcha Experto,Septiembre,50,9500
+Kit Matcha Experto,Octubre,45,8550
+Kit Matcha Experto,Noviembre,55,10450
+Kit Matcha Experto,Diciembre,70,13300
+Accesorios Matcha (Batidor),Enero,50,5000
+Accesorios Matcha (Batidor),Febrero,65,6500
+Accesorios Matcha (Batidor),Marzo,55,5500
+Accesorios Matcha (Batidor),Abril,45,4500
+Accesorios Matcha (Batidor),Mayo,75,7500
+Accesorios Matcha (Batidor),Junio,85,8500
+Accesorios Matcha (Batidor),Julio,95,9500
+Accesorios Matcha (Batidor),Agosto,90,9000
+Accesorios Matcha (Batidor),Septiembre,80,8000
+Accesorios Matcha (Batidor),Octubre,70,7000
+Accesorios Matcha (Batidor),Noviembre,85,8500
+Accesorios Matcha (Batidor),Diciembre,100,10000
+Accesorios Matcha (Colador),Enero,45,4050
+Accesorios Matcha (Colador),Febrero,60,5400
+Accesorios Matcha (Colador),Marzo,50,4500
+Accesorios Matcha (Colador),Abril,40,3600
+Accesorios Matcha (Colador),Mayo,70,6300
+Accesorios Matcha (Colador),Junio,80,7200
+Accesorios Matcha (Colador),Julio,90,8100
+Accesorios Matcha (Colador),Agosto,85,7650
+Accesorios Matcha (Colador),Septiembre,75,6750
+Accesorios Matcha (Colador),Octubre,65,5850
+Accesorios Matcha (Colador),Noviembre,80,7200
+Accesorios Matcha (Colador),Diciembre,95,8550
+Accesorios Matcha (Cuchara),Enero,55,3850
+Accesorios Matcha (Cuchara),Febrero,70,4900
+Accesorios Matcha (Cuchara),Marzo,60,4200
+Accesorios Matcha (Cuchara),Abril,50,3500
+Accesorios Matcha (Cuchara),Mayo,80,5600
+Accesorios Matcha (Cuchara),Junio,90,6300
+Accesorios Matcha (Cuchara),Julio,100,7000
+Accesorios Matcha (Cuchara),Agosto,95,6650
+Accesorios Matcha (Cuchara),Septiembre,85,5950
+Accesorios Matcha (Cuchara),Octubre,75,5250
+Accesorios Matcha (Cuchara),Noviembre,90,6300
+Accesorios Matcha (Cuchara),Diciembre,105,7350`;
 
-    const labels = data.map(d => d.mes);
-    const values = data.map(d => d.ventas);
+// ===== util: parse CSV simple (funciona con comas sin comillas)
+function parseCSV(text){
+  const rows = text.trim().split(/\r?\n/);
+  const headers = rows.shift().split(',').map(h=>h.trim());
+  return rows.map(r=>{
+    const cols = r.split(',').map(c=>c.trim());
+    const obj = {};
+    headers.forEach((h,i)=> obj[h]=cols[i]);
+    return obj;
+  });
+}
 
-    // ===== GRÁFICA DE BARRAS =====
-    new Chart(document.getElementById("chartBar"), {
-        type: "bar",
-        data: {
-            labels: labels,
-            datasets: [{
-                label: "Ventas Mensuales (MXN)",
-                data: values
-            }]
-        }
-    });
+const raw = parseCSV(csvText);
 
-    // ===== GRÁFICA DE LÍNEA =====
-    new Chart(document.getElementById("chartLine"), {
-        type: "line",
-        data: {
-            labels: labels,
-            datasets: [{
-                label: "Ventas Mensuales (MXN)",
-                data: values,
-                fill: false
-            }]
-        }
-    });
+// Normalizar y convertir números
+raw.forEach(r=>{
+  r['Unidades Vendidas'] = Number(r['Unidades Vendidas']||0);
+  r['Ingresos (MXN)'] = Number(r['Ingresos (MXN)']||0);
+});
 
-    // ===== GRÁFICA DE DONA =====
-    new Chart(document.getElementById("chartPie"), {
-        type: "pie",
-        data: {
-            labels: labels,
-            datasets: [{
-                label: "Ventas Mensuales",
-                data: values
-            }]
-        }
-    });
+// Orden de meses deseado
+const mesesOrden = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+
+// Aggregar ingresos por mes
+const ingresosPorMes = {};
+mesesOrden.forEach(m => ingresosPorMes[m]=0);
+raw.forEach(r=>{
+  if(mesesOrden.includes(r.Mes)) ingresosPorMes[r.Mes]+= r['Ingresos (MXN)'];
+});
+
+// Datos para charts
+const labels = mesesOrden;
+const values = labels.map(m=> Math.round(ingresosPorMes[m]));
+
+// KPIs
+const totalUnidades = raw.reduce((s,r)=> s + r['Unidades Vendidas'], 0);
+const totalIngresos = raw.reduce((s,r)=> s + r['Ingresos (MXN)'], 0);
+const ticketProm = totalUnidades ? (totalIngresos/totalUnidades) : 0;
+document.getElementById('kpi-unidades').textContent = totalUnidades.toLocaleString('es-MX');
+document.getElementById('kpi-ingresos').textContent = totalIngresos.toLocaleString('es-MX', {style:'currency', currency:'MXN'});
+document.getElementById('kpi-ticket').textContent = ticketProm.toFixed(2);
+
+// Top productos por ingreso anual
+const byProduct = {};
+raw.forEach(r=>{
+  const prod = r.Producto;
+  if(!byProduct[prod]) byProduct[prod] = {unidades:0, ingresos:0};
+  byProduct[prod].unidades += r['Unidades Vendidas'];
+  byProduct[prod].ingresos += r['Ingresos (MXN)'];
+});
+const topProducts = Object.entries(byProduct).map(([prod,obj])=> ({producto:prod, unidades: obj.unidades, ingresos: obj.ingresos}))
+  .sort((a,b)=> b.ingresos - a.ingresos).slice(0,10);
+
+// Llenar tabla top 10
+const tbody = document.querySelector('#topTable tbody');
+topProducts.forEach(p=>{
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td>${p.producto}</td><td class="small">—</td><td>${p.unidades.toLocaleString('es-MX')}</td><td>${p.ingresos.toLocaleString('es-MX')}</td>`;
+  tbody.appendChild(tr);
+});
+
+// Colors palette (soft matcha)
+const palette = [
+  '#d9f2d9', '#bfe9bf', '#a6e0a6', '#8bd78b',
+  '#6fcf6f', '#5ab85a', '#3ea33e', '#2b8b2b',
+  '#1f6f1f', '#145214'
+];
+
+// Chart: Bar
+const ctxBar = document.getElementById('chartBar').getContext('2d');
+new Chart(ctxBar, {
+  type: 'bar',
+  data: {
+    labels,
+    datasets:[{
+      label:'Ingresos (MXN)',
+      data: values,
+      backgroundColor: palette.slice(2,2+labels.length),
+      borderRadius:6
+    }]
+  },
+  options:{
+    plugins:{ legend:{display:false} },
+    scales:{
+      y:{ beginAtZero:true, ticks:{ callback: v => v.toLocaleString('es-MX') } }
+    }
+  }
+});
+
+// Chart: Line
+const ctxLine = document.getElementById('chartLine').getContext('2d');
+new Chart(ctxLine, {
+  type:'line',
+  data:{
+    labels,
+    datasets:[{
+      label:'Ingresos (MXN)',
+      data: values,
+      borderColor: '#2a6b3a',
+      backgroundColor: 'rgba(42,107,58,0.08)',
+      tension:0.25,
+      fill:true,
+      pointRadius:3
+    }]
+  },
+  options:{
+    plugins:{ legend:{display:false} },
+    scales:{ y:{ beginAtZero:true, ticks:{ callback: v => v.toLocaleString('es-MX') } } }
+  }
+});
+
+// Chart: Pie (top products)
+const pieLabels = topProducts.map(p=>p.producto);
+const pieValues = topProducts.map(p=>Math.round(p.ingresos));
+const ctxPie = document.getElementById('chartPie').getContext('2d');
+new Chart(ctxPie, {
+  type:'doughnut',
+  data:{
+    labels: pieLabels,
+    datasets:[{
+      data: pieValues,
+      backgroundColor: palette.slice(0, pieLabels.length)
+    }]
+  },
+  options:{
+    plugins:{ legend:{position:'right', labels:{boxWidth:12, padding:8}} }
+  }
+});
 </script>
-
 </body>
 </html>
